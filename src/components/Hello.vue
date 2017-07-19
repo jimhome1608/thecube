@@ -2,15 +2,7 @@
   <div>
     <div class="container">
       <div class="row">
-        <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <!--  <td><i  class="fa fa-bars fa-2x" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;<td> -->
-          <td>
-            <div  v-html="get_html2()" ></div>
-          </td>
-
-          <td>
-            <br />
+        <div>
             <range-slider
                     class="slider"
                     min="0"
@@ -40,26 +32,51 @@
             </range-slider>
             <span class="badge" style="background-color: blue;">{{rgb_blue}}</span>
             <br />
-          </td>
-        </tr>
+        </div>
+        <br />
+        <br />
+        <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
+
         <tr>
+          <td height="150px" align="right">
+            <div class="switchon h4" style="width: 80px;height: 80px" v-on:click="light_on"
+                 v-html="get_html2()" >
+            </div>
+
+          </td>
 
           <td>
-            <i v-on:click="light_on"  class="fa fa-lightbulb-o fa-4x" aria-hidden="true" > on</i>
-          </td>
-          <td>
-            <i v-on:click="light_off"  class="fa fa-power-off fa-3x"  aria-hidden="true"> off </i>
+            <input type="number"  v-model="rgb_red">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: red;">{{rgb_red}}</span><br>
+            <input type="number"  v-model="rgb_green">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: green;">{{rgb_green}}</span><br>
+            <input type="number"  v-model="rgb_blue">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: blue;">{{rgb_blue}}</span><br>
+
           </td>
         </tr>
         </table>
+        <br />
+        <br />
+        <div class="panelbottom">
+          <hr>
+          <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td>
+                <button  class="btn" v-on:click="light_off" type="button">
+                  Off
+                  <i class="fa  fa-power-off fa-2x" aria-hidden="true" style="color: grey;"></i>
+                </button>
+              </td>
+              <td>
+                <button class="btn" v-on:click="goodbye" type="button">
+                  Exit
+                  <i class="fa  fa-hand-spock-o fa-2x" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </table>
+          <hr>
+        </div>
 
-        <hr />
-        <br />
-        <i v-on:click="goodbye" class="fa  fa-hand-spock-o fa-3x" aria-hidden="true">Exit</i>
 
-        <br />
-        <br />
-        <br />
         <!--
         <button type="button"  class="btn btn-danger"  v-on:click="goodbye">
             <h4>さよなら </h4>
@@ -76,6 +93,7 @@
     import RangeSlider from 'vue-range-slider'
     import 'vue-range-slider/dist/vue-range-slider.css'
 
+
     export default {
         name: 'hello',
         components: {
@@ -83,7 +101,7 @@
         },
         data: function() {
             return {
-                bgc: 0x4551ff,
+                canvas_updated: 0,
                 rgb_red: 0,
                 rgb_green: 0,
                 rgb_blue: 0,
@@ -105,13 +123,24 @@
                 return _html;
             },
             get_html2() {
-                var _html2 = '<canvas id="myCanvas" width="150" height="150" style="background-color: #';
+                this.canvas_updated = 1;
+                var _html2 = '<canvas id="myCanvas" width="100" height="60" style="background-color: #';
                 _html2 = _html2.concat(this.get_rgb_string());
-                _html2 = _html2.concat('"></canvas>');
+                _html2 = _html2.concat('"></canvas><span class="label label-default">Apply this color..</span>');
+                return _html2;
+            } ,
+            get_html3() {
+                this.canvas_updated = 1;
+                var _html2 = ' <span class="badge" style="background-color: #';
+                _html2 = _html2.concat(this.get_rgb_string());
+                _html2 = _html2.concat('">Apply this color</span>');
                 return _html2;
             } ,
             get_rgb_string() {
 
+              this.rgb_red = Math.floor(this.rgb_red);
+              this.rgb_green = Math.floor(this.rgb_green);
+              this.rgb_blue = Math.floor(this.rgb_blue);
               var hexString = this.rgb_red.toString(16);
               if (this.rgb_red < 16)
                   hexString = '0'.concat(hexString);
@@ -193,10 +222,25 @@
     display: inline-block;
     margin: 0 10px;
   }
-  .fa-bars, .fa-camera-retro, .fa-hand-spock-o, .fa-lightbulb-o, .fa-power-off {
+  .fa-bars, .fa-camera-retro, .fa-hand-spock-o, .switchon, .fa-power-off {
     cursor: pointer;
   }
   a {
     color: #42b983;
+  }
+  .bigbutton {
+    width: 90px;
+    height: 90px;
+    font-size: large;
+  }
+  .badge {
+    width: 50px;
+    margin-left: 5px;
+  }
+  .panelbottom {
+    background-color: darkgray;
+  }
+  input {
+    width: 100px;
   }
 </style>
