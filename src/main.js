@@ -4,7 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueResource from 'vue-resource';
+import store from 'src/store';
 
+Vue.use(store);
 Vue.use(VueResource);
 
 Vue.config.productionTip = false
