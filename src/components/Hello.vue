@@ -55,6 +55,7 @@
         </table>
         <br />
         <br />
+
         <div class="panelbottom">
           <hr>
           <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -75,6 +76,57 @@
           </table>
           <hr>
         </div>
+          <table class="table">
+              <thead>
+              <tr>
+                  <!--  <th class="nighttime">{{events.records.length}} Events</th> -->
+                  <th>X</th>
+                  <th>Y</th>
+                  <th>Z</th>
+                  <th>Red</th>
+                  <th>Green</th>
+                  <th>Blue</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr  v-for="led in leds.LEDS" v-if="led.Z==0" class="evenlevel">
+                  <!--  <td class="nighttime">{{!-tDate(r.event_time)}}</td> -->
+                  <td>{{led.X}} </td>
+                  <td>{{led.Y}} </td>
+                  <td>{{led.Z}} </td>
+                  <td>{{led.R}} </td>
+                  <td>{{led.G}} </td>
+                  <td>{{led.B}} </td>
+              </tr>
+              <tr  v-for="led in leds.LEDS" v-if="led.Z==1" class="oddlevel">
+                  <!--  <td class="nighttime">{{!-tDate(r.event_time)}}</td> -->
+                  <td>{{led.X}} </td>
+                  <td>{{led.Y}} </td>
+                  <td>{{led.Z}} </td>
+                  <td>{{led.R}} </td>
+                  <td>{{led.G}} </td>
+                  <td>{{led.B}} </td>
+              </tr>
+              <tr  v-for="led in leds.LEDS" v-if="led.Z==2"  class="evenlevel">
+                  <!--  <td class="nighttime">{{!-tDate(r.event_time)}}</td> -->
+                  <td>{{led.X}} </td>
+                  <td>{{led.Y}} </td>
+                  <td>{{led.Z}} </td>
+                  <td>{{led.R}} </td>
+                  <td>{{led.G}} </td>
+                  <td>{{led.B}} </td>
+              </tr>
+              <tr  v-for="led in leds.LEDS" v-if="led.Z==3" class="oddlevel">
+                  <!--  <td class="nighttime">{{!-tDate(r.event_time)}}</td> -->
+                  <td>{{led.X}} </td>
+                  <td>{{led.Y}} </td>
+                  <td>{{led.Z}} </td>
+                  <td>{{led.R}} </td>
+                  <td>{{led.G}} </td>
+                  <td>{{led.B}} </td>
+              </tr>
+              </tbody>
+          </table>
 
         <!--
         <button type="button"  class="btn btn-danger"  v-on:click="goodbye">
@@ -229,8 +281,8 @@
             },
             light_on() {
                this.set_cube_color(this.rgb_red, this.rgb_green, this.rgb_blue);
-               this.set_led_color(3,1,1,255,0,0);
-               this.set_led_color(2,2,1,0,255,0);
+               //this.set_led_color(3,1,1,255,0,0);
+               //this.set_led_color(2,2,1,0,255,0);
                store.commit('setleds', this.leds);
                store.commit('set_rgb_red',this.rgb_red);
                 store.commit('set_rgb_green',this.rgb_green);
@@ -258,6 +310,13 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+  .evenlevel {
+      background: lightyellow;
+  }
+  .oddlevel {
+     background: lightcyan;
+  }
   h1, h2 {
     font-weight: normal;
   }
