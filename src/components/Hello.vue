@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <div class="row">
+      <div class="row" align="left">
           <input type="checkbox" v-model="showRangeFinder">
           <label for="checkbox">Show Sliders</label>
         <div v-if="showRangeFinder==true">
@@ -35,6 +35,8 @@
             <span class="badge" style="background-color: blue;">{{rgb_blue}}</span>
             <br />
         </div>
+      </div>
+          <div class="row" >
         <br />
         <br />
         <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -53,6 +55,45 @@
             <input type="number"  v-model="rgb_blue">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: blue;">{{rgb_blue}}</span><br>
 
           </td>
+        </tr>
+        </table>
+        <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td>
+            <button  class="btn"  v-on:click="set_color('black')" type="button">
+                Black
+            </button>
+            </td>
+            <td>
+                <button  class="btn"  v-on:click="set_color('white')" type="button">
+                    White
+                </button>
+            </td>
+            <td>
+                <button  class="btn"  v-on:click="set_color('red')" type="button">
+                    Red
+                </button>
+            </td>
+            <td>
+                <button  class="btn"  v-on:click="set_color('green')" type="button">
+                    Green
+                </button>
+            </td>
+            <td>
+                <button  class="btn"  v-on:click="set_color('blue')" type="button">
+                    Blue
+                </button>
+            </td>
+            <td>
+                <button  class="btn"  v-on:click="set_color('purple')" type="button">
+                    Purple
+                </button>
+            </td>
+            <td>
+                <button  class="btn"  v-on:click="set_color('randome')" type="button">
+                    Random
+                </button>
+            </td>
         </tr>
         </table>
         <br />
@@ -78,14 +119,20 @@
                             <option value="3rd Level">3rd Level</option>
                             <option value="2nd  Level">2nd  Level</option>
                             <option value="Bottom Level">Bottom Level</option>
+                            <option value="Random">Random</option>
+                            <option value="Cube">Cube</option>
                         </select>
                     </button>
                 </td>
-
+                <td>
+                    <button  class="btn"  v-on:click="random_random" type="button">
+                        Suprise
+                    </button>
+                </td>
               <td>
                 <button class="btn" v-on:click="goodbye" type="button">
                   Exit
-                  <i class="fa  fa-hand-spock-o fa-2x" aria-hidden="true"></i>
+                  <i class="fa  fa-hand-spock-o fa" aria-hidden="true"></i>
                 </button>
               </td>
             </tr>
@@ -186,6 +233,36 @@
             this. readLocalStorage();
         },
         methods: {
+            set_color(color_name) {
+                this.rgb_blue = 0;
+                this.rgb_green = 0;
+                this.rgb_red = 0;
+                if (color_name == 'white') {
+                    this.rgb_blue = 255;
+                    this.rgb_green = 255;
+                    this.rgb_red = 255;
+                };
+                if (color_name == 'red') {
+                    this.rgb_red = 255;
+                };
+                if (color_name == 'green') {
+                    this.rgb_green = 255;
+                };
+                if (color_name == 'blue') {
+                    this.rgb_blue = 255;
+                };
+                if (color_name == 'purple') {
+                    this.rgb_blue = 255;
+                    this.rgb_red = 130;
+                };
+                if (color_name == 'randome') {
+                    this.rgb_blue = Math.floor((Math.random() * 255) + 1);
+                    this.rgb_green = Math.floor((Math.random() * 255) + 1);
+                    this.rgb_red = Math.floor((Math.random() * 255) + 1);
+                };
+
+
+            },
             get_html2() {
                 var _html2 = '<canvas id="myCanvas2" width="100" height="80" style="background-color: #';
                 _html2 = _html2.concat(this.get_rgb_string_from_screen());
@@ -198,7 +275,13 @@
                 _html2 = _html2.concat('"></canvas>');
                 return _html2;
             } ,
-
+            random_random() {
+                this.select_all("Random");
+                this.rgb_blue = Math.floor((Math.random() * 255) + 1);
+                this.rgb_green = Math.floor((Math.random() * 255) + 1);
+                this.rgb_red = Math.floor((Math.random() * 255) + 1);
+                this.light_on();
+            },
             get_rgb_string_from_screen() {
                return this.get_rgb_string(this.rgb_red, this.rgb_green, this.rgb_blue);
             },
@@ -235,7 +318,7 @@
               }
               return return_commands;
             },
-            select_all() {
+            select_all(sender_state) {
                 var state = false;
                 var s = document.getElementById("mySelect").value;
                 if (s == "All") state = true;
@@ -245,15 +328,37 @@
                 if (s == "3rd Level") z_level = 2;
                 if (s == "2nd  Level") z_level = 1;
                 if (s == "Bottom Level") z_level = 0;
+                if (s == "Random") z_level = 4;
+                if (s == "Cube") z_level = 5;
+
+                if (sender_state == "Random") z_level = 4;
                 z_level = Math.floor(z_level);
 
                 for (var i = 0; i < this.leds.LEDS.length; i++) {
                     var led = this.leds.LEDS[i];
                     if (z_level > -1) {
-                        console.log(led.Z);
                         state = false;
                         if (led.Z == z_level) state = true;
-                    }
+                        if (z_level == 4) {
+                            state = false;
+                            if (Math.floor((Math.random() * 10) + 1) > 5 ) state = true;
+                        };
+                        if (z_level == 5) {
+                            state = false;
+                            if (led.Z == 3 & (led.Y == 0 | led.Y ==3)) state = true;
+                            if (led.Z == 0 & (led.Y == 0 | led.Y ==3)) state = true;
+                            if (led.X == 0 &  led.Z ==0) state = true;
+                            if (led.X == 3 &  led.Z ==0) state = true;
+                            if (led.X == 0 &  led.Z ==3) state = true;
+                            if (led.X == 3 &  led.Z ==3) state = true;
+
+                            if (led.Y == 0 &  led.X ==0) state = true;
+                            if (led.Y == 0 &  led.X ==3) state = true;
+                            if (led.Y == 3 &  led.X ==0) state = true;
+                            if (led.Y == 3 &  led.X ==3) state = true;
+                        }
+
+                    };
                     led.S = state;
                 }
             },
@@ -304,12 +409,11 @@
                this.set_cube_color(this.rgb_red, this.rgb_green, this.rgb_blue);
                //this.set_led_color(3,1,1,255,0,0);
                //this.set_led_color(2,2,1,0,255,0);
-               store.commit('setleds', this.leds);
+              // store.commit('setleds', this.leds);
                store.commit('set_rgb_red',this.rgb_red);
                store.commit('set_rgb_green',this.rgb_green);
                store.commit('set_rgb_blue',this.rgb_blue);
                var _url = "http://220.244.249.125:8085/cube.php?d=".concat(this.led_to_commands());
-               console.log(_url)
                 this.$http.get(_url)
                     .then(function (response) {
                        // console.log(response.body)
