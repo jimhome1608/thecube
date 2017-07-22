@@ -1,9 +1,23 @@
 <template>
   <div>
     <div class="container">
-      <div class="row" align="left">
-          <input type="checkbox" v-model="showRangeFinder">
-          <label for="checkbox">Show Sliders</label>
+        <div v-if="snapshotFile!=''">
+            <img v-if="screen_with<800" :src='snapshotFile' width="300" height="300"/>
+            <img v-if="screen_with>800" :src='snapshotFile' width="600" height="600"/>
+            <br />
+            <br />
+        </div>
+        <div style="color: gray" v-if="snapshot==0">
+            <!-- <img src="../assets/camera_still.jpg" width="300" height="457"/> -->
+            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+            <br />&nbsp;
+            Taking a new photo ..
+            <br />&nbsp;
+        </div>
+
+        <div class="row" align="left">
+          <!-- <input type="checkbox" v-model="showRangeFinder">
+          <label for="checkbox">Show Sliders</label> -->
         <div v-if="showRangeFinder==true">
             <range-slider
                     class="slider"
@@ -37,25 +51,22 @@
         </div>
       </div>
           <div class="row" >
-        <br />
-        <br />
         <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
-
         <tr>
-          <td height="150px" align="right">
-            <div class="switchon h4" style="width: 80px;height: 80px" v-on:click="light_on"
-                 v-html="get_html2()" >
-            </div>
-
-          </td>
-
           <td>
             <input type="number"  v-model="rgb_red">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: red;">{{rgb_red}}</span><br>
-            <input type="number"  v-model="rgb_green">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: green;">{{rgb_green}}</span><br>
-            <input type="number"  v-model="rgb_blue">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: blue;">{{rgb_blue}}</span><br>
 
           </td>
+            <td>
+                <input type="number"  v-model="rgb_green">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: green;">{{rgb_green}}</span><br>
+
+            </td>
+            <td>
+                <input type="number"  v-model="rgb_blue">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: blue;">{{rgb_blue}}</span><br>
+
+            </td>
         </tr>
+            <br />
         </table>
         <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
@@ -89,15 +100,8 @@
                     Purple
                 </button>
             </td>
-            <td>
-                <button  class="btn"  v-on:click="set_color('randome')" type="button">
-                    Random
-                </button>
-            </td>
         </tr>
         </table>
-        <br />
-        <br />
 
         <div class="panelbottom">
           <hr>
@@ -111,7 +115,7 @@
                 </td>
                 <td>
                     <button  class="btn" v-on:click="select_all()" type="button">
-                        Select:&nbsp;
+                        Select:<br />
                         <select id="mySelect" >
                             <option value="All">All</option>
                             <option value="None">None</option>
@@ -129,18 +133,16 @@
                         Suprise
                     </button>
                 </td>
-              <td>
-                <button class="btn" v-on:click="goodbye" type="button">
-                  Exit
-                  <i class="fa  fa-hand-spock-o fa" aria-hidden="true"></i>
-                </button>
-              </td>
+                <td>
+                    <button class="btn" v-on:click="get_snapshot" type="button">
+                        Photo
+                        <i class="fa  fa-camera fa" aria-hidden="true"></i>
+                    </button>
+                </td>
             </tr>
           </table>
           <hr>
         </div>
-
-
           <table class="table">
               <thead>
               <tr>
@@ -194,6 +196,8 @@
         },
         data: function() {
             return {
+                snapshot: -1,
+                snapshotObject: {},
                 showRangeFinder: false,
                 rgb_red: 0,
                 rgb_green: 0,
@@ -228,11 +232,42 @@
             screen_with: function() {
                 return screen.width;
             },
+            snapshotFile: function () {
+                if (this.snapshotObject == undefined)
+                    return "";
+                if (this.snapshotObject.hasOwnProperty('filename')) {
+                    console.log(this.snapshotObject.filename);
+                    if ("NOKEYS" == this.snapshotObject.filename)
+                        return "../assets/leaves.jpg";
+                    else
+                        return "http://220.244.249.125:8085/images/" + this.snapshotObject.filename;
+                }
+                else
+                    return "";
+            },
         },
         created: function () {
             this. readLocalStorage();
+            this.get_snapshot();
         },
         methods: {
+            get_snapshot() {
+                // var _url = "http://220.244.249.125:8085/cube.php?d=".concat(this.led_to_commands());
+                var _url = "http://220.244.249.125:8085/camera.php";
+                this.snapshot = 0 ;
+                this.snapshotObject = {};
+                this.$http.get(_url)
+                    .then(function (response) {
+                        this.snapshot =1 ;
+                        console.log(response.body);
+                        this.snapshotObject = response.body;
+                    })
+                    .catch(function (response) {
+
+                        alertify.warning("Snapshot failed");
+                        this.snapshot = -1;
+                    });
+            },
             set_color(color_name) {
                 this.rgb_blue = 0;
                 this.rgb_green = 0;
@@ -264,13 +299,13 @@
 
             },
             get_html2() {
-                var _html2 = '<canvas id="myCanvas2" width="100" height="80" style="background-color: #';
+                var _html2 = '<canvas id="myCanvas2" width="80" height="40" style="background-color: #';
                 _html2 = _html2.concat(this.get_rgb_string_from_screen());
                 _html2 = _html2.concat('"></canvas>');
                 return _html2;
             } ,
             get_html3() {
-                var _html2 = '<canvas class="myCanvas3" width="40" height="20" style="background-color: #';
+                var _html2 = '<br /><canvas class="myCanvas3"  width="60" height="20" style="background-color: #';
                 _html2 = _html2.concat(this.get_rgb_string_from_screen());
                 _html2 = _html2.concat('"></canvas>');
                 return _html2;
@@ -418,16 +453,11 @@
                     .then(function (response) {
                        // console.log(response.body)
                         this.thecube = response.body;
+                        this.get_snapshot();
                     })
                     .catch(function (response) {
                         alertify.warning("thecube failed");
                     });
-            },
-            light_off() {
-                this.rgb_red = 0;
-                this.rgb_green = 0;
-                this.rgb_blue = 0;
-                this.light_on();
             },
         },
     }
