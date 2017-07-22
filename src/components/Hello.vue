@@ -2,7 +2,9 @@
   <div>
     <div class="container">
       <div class="row">
-        <div>
+          <input type="checkbox" v-model="showRangeFinder">
+          <label for="checkbox">Show Sliders</label>
+        <div v-if="showRangeFinder==true">
             <range-slider
                     class="slider"
                     min="0"
@@ -60,12 +62,26 @@
           <hr>
           <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td>
-                <button  class="btn" v-on:click="light_off" type="button">
-                  Off
-                  <i class="fa  fa-power-off fa-2x" aria-hidden="true" style="color: grey;"></i>
-                </button>
-              </td>
+                <td>
+                  <button  class="btn"  v-on:click="light_on" type="button">
+                      Apply
+                  </button>
+                    <span v-html="get_html3()"></span>
+                </td>
+                <td>
+                    <button  class="btn" v-on:click="select_all()" type="button">
+                        Select:&nbsp;
+                        <select id="mySelect" >
+                            <option value="All">All</option>
+                            <option value="None">None</option>
+                            <option value="Top Level">Top Level</option>
+                            <option value="3rd Level">3rd Level</option>
+                            <option value="2nd  Level">2nd  Level</option>
+                            <option value="Bottom Level">Bottom Level</option>
+                        </select>
+                    </button>
+                </td>
+
               <td>
                 <button class="btn" v-on:click="goodbye" type="button">
                   Exit
@@ -76,10 +92,13 @@
           </table>
           <hr>
         </div>
+
+
           <table class="table">
               <thead>
               <tr>
                   <!--  <th class="nighttime">{{events.records.length}} Events</th> -->
+                  <th>Select</th>
                   <th>X</th>
                   <th>Y</th>
                   <th>Z</th>
@@ -89,46 +108,20 @@
               </tr>
               </thead>
               <tbody>
-              <tr  v-for="led in leds.LEDS" v-if="led.Z==0" class="evenlevel">
-                  <!--  <td class="nighttime">{{!-tDate(r.event_time)}}</td> -->
+              <tr  v-for="led in leds.LEDS">
+                  <td><input type="checkbox"  v-model="led.S"></td>
                   <td>{{led.X}} </td>
                   <td>{{led.Y}} </td>
                   <td>{{led.Z}} </td>
                   <td>{{led.R}} </td>
                   <td>{{led.G}} </td>
                   <td>{{led.B}} </td>
-              </tr>
-              <tr  v-for="led in leds.LEDS" v-if="led.Z==1" class="oddlevel">
-                  <!--  <td class="nighttime">{{!-tDate(r.event_time)}}</td> -->
-                  <td>{{led.X}} </td>
-                  <td>{{led.Y}} </td>
-                  <td>{{led.Z}} </td>
-                  <td>{{led.R}} </td>
-                  <td>{{led.G}} </td>
-                  <td>{{led.B}} </td>
-              </tr>
-              <tr  v-for="led in leds.LEDS" v-if="led.Z==2"  class="evenlevel">
-                  <!--  <td class="nighttime">{{!-tDate(r.event_time)}}</td> -->
-                  <td>{{led.X}} </td>
-                  <td>{{led.Y}} </td>
-                  <td>{{led.Z}} </td>
-                  <td>{{led.R}} </td>
-                  <td>{{led.G}} </td>
-                  <td>{{led.B}} </td>
-              </tr>
-              <tr  v-for="led in leds.LEDS" v-if="led.Z==3" class="oddlevel">
-                  <!--  <td class="nighttime">{{!-tDate(r.event_time)}}</td> -->
-                  <td>{{led.X}} </td>
-                  <td>{{led.Y}} </td>
-                  <td>{{led.Z}} </td>
-                  <td>{{led.R}} </td>
-                  <td>{{led.G}} </td>
-                  <td>{{led.B}} </td>
+
               </tr>
               </tbody>
           </table>
-
         <!--
+         <td v-html="get_html3()"></td>
         <button type="button"  class="btn btn-danger"  v-on:click="goodbye">
             <h4>さよなら </h4>
         </button>
@@ -154,33 +147,32 @@
         },
         data: function() {
             return {
-                canvas_updated: 0,
+                showRangeFinder: false,
                 rgb_red: 0,
                 rgb_green: 0,
                 rgb_blue: 0,
                 thecube: {"datalength":"22","data":"{0000330FF}{111FF0000}"} ,
                 leds: {"LEDS":[
 
-                    {"X":"0","Y":"0","Z":"0","R":"0","G":"0","B":"0"},{"X":"1","Y":"0","Z":"0","R":"0","G":"0","B":"0"},{"X":"2","Y":"0","Z":"0","R":"0","G":"0","B":"0"},{"X":"3","Y":"0","Z":"0","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"1","Z":"0","R":"0","G":"0","B":"0"},{"X":"1","Y":"1","Z":"0","R":"0","G":"0","B":"0"},{"X":"2","Y":"1","Z":"0","R":"0","G":"0","B":"0"},{"X":"3","Y":"1","Z":"0","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"2","Z":"0","R":"0","G":"0","B":"0"},{"X":"1","Y":"2","Z":"0","R":"0","G":"0","B":"0"},{"X":"2","Y":"2","Z":"0","R":"0","G":"0","B":"0"},{"X":"3","Y":"2","Z":"0","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"3","Z":"0","R":"0","G":"0","B":"0"},{"X":"1","Y":"3","Z":"0","R":"0","G":"0","B":"0"},{"X":"2","Y":"3","Z":"0","R":"0","G":"0","B":"0"},{"X":"3","Y":"3","Z":"0","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"0","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"0","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"0","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"0","Z":"3","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"1","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"1","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"1","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"1","Z":"3","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"2","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"2","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"2","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"2","Z":"3","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"3","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"3","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"3","Z":"3","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"3","Z":"3","R":"0","G":"0","B":"0"},
 
-                    {"X":"0","Y":"0","Z":"1","R":"0","G":"0","B":"0"},{"X":"1","Y":"0","Z":"1","R":"0","G":"0","B":"0"},{"X":"2","Y":"0","Z":"1","R":"0","G":"0","B":"0"},{"X":"3","Y":"0","Z":"1","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"1","Z":"1","R":"0","G":"0","B":"0"},{"X":"1","Y":"1","Z":"1","R":"0","G":"0","B":"0"},{"X":"2","Y":"1","Z":"1","R":"0","G":"0","B":"0"},{"X":"3","Y":"1","Z":"1","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"2","Z":"1","R":"0","G":"0","B":"0"},{"X":"1","Y":"2","Z":"1","R":"0","G":"0","B":"0"},{"X":"2","Y":"2","Z":"1","R":"0","G":"0","B":"0"},{"X":"3","Y":"2","Z":"1","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"3","Z":"1","R":"0","G":"0","B":"0"},{"X":"1","Y":"3","Z":"1","R":"0","G":"0","B":"0"},{"X":"2","Y":"3","Z":"1","R":"0","G":"0","B":"0"},{"X":"3","Y":"3","Z":"1","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"0","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"0","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"0","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"0","Z":"2","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"1","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"1","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"1","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"1","Z":"2","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"2","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"2","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"2","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"2","Z":"2","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"3","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"3","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"3","Z":"2","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"3","Z":"2","R":"0","G":"0","B":"0"},
 
-                    {"X":"0","Y":"0","Z":"2","R":"0","G":"0","B":"0"},{"X":"1","Y":"0","Z":"2","R":"0","G":"0","B":"0"},{"X":"2","Y":"0","Z":"2","R":"0","G":"0","B":"0"},{"X":"3","Y":"0","Z":"2","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"1","Z":"2","R":"0","G":"0","B":"0"},{"X":"1","Y":"1","Z":"2","R":"0","G":"0","B":"0"},{"X":"2","Y":"1","Z":"2","R":"0","G":"0","B":"0"},{"X":"3","Y":"1","Z":"2","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"2","Z":"2","R":"0","G":"0","B":"0"},{"X":"1","Y":"2","Z":"2","R":"0","G":"0","B":"0"},{"X":"2","Y":"2","Z":"2","R":"0","G":"0","B":"0"},{"X":"3","Y":"2","Z":"2","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"3","Z":"2","R":"0","G":"0","B":"0"},{"X":"1","Y":"3","Z":"2","R":"0","G":"0","B":"0"},{"X":"2","Y":"3","Z":"2","R":"0","G":"0","B":"0"},{"X":"3","Y":"3","Z":"2","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"0","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"0","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"0","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"0","Z":"1","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"1","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"1","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"1","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"1","Z":"1","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"2","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"2","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"2","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"2","Z":"1","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"3","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"3","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"3","Z":"1","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"3","Z":"1","R":"0","G":"0","B":"0"},
 
-                    {"X":"0","Y":"0","Z":"3","R":"0","G":"0","B":"0"},{"X":"1","Y":"0","Z":"3","R":"0","G":"0","B":"0"},{"X":"2","Y":"0","Z":"3","R":"0","G":"0","B":"0"},{"X":"3","Y":"0","Z":"3","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"1","Z":"3","R":"0","G":"0","B":"0"},{"X":"1","Y":"1","Z":"3","R":"0","G":"0","B":"0"},{"X":"2","Y":"1","Z":"3","R":"0","G":"0","B":"0"},{"X":"3","Y":"1","Z":"3","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"2","Z":"3","R":"0","G":"0","B":"0"},{"X":"1","Y":"2","Z":"3","R":"0","G":"0","B":"0"},{"X":"2","Y":"2","Z":"3","R":"0","G":"0","B":"0"},{"X":"3","Y":"2","Z":"3","R":"0","G":"0","B":"0"},
-                    {"X":"0","Y":"3","Z":"3","R":"0","G":"0","B":"0"},{"X":"1","Y":"3","Z":"3","R":"0","G":"0","B":"0"},{"X":"2","Y":"3","Z":"3","R":"0","G":"0","B":"0"},{"X":"3","Y":"3","Z":"3","R":"0","G":"0","B":"0"}
-
+                    {"S":"true","X":"0","Y":"0","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"0","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"0","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"0","Z":"0","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"1","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"1","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"1","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"1","Z":"0","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"2","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"2","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"2","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"2","Z":"0","R":"0","G":"0","B":"0"},
+                    {"S":"true","X":"0","Y":"3","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"1","Y":"3","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"2","Y":"3","Z":"0","R":"0","G":"0","B":"0"},{"S":"true","X":"3","Y":"3","Z":"0","R":"0","G":"0","B":"0"}
                 ]
                 },
             }
@@ -195,10 +187,15 @@
         },
         methods: {
             get_html2() {
-                this.canvas_updated = 1;
-                var _html2 = '<canvas id="myCanvas" width="100" height="60" style="background-color: #';
+                var _html2 = '<canvas id="myCanvas2" width="100" height="80" style="background-color: #';
                 _html2 = _html2.concat(this.get_rgb_string_from_screen());
-                _html2 = _html2.concat('"></canvas><span class="label label-default">Apply this color..</span>');
+                _html2 = _html2.concat('"></canvas>');
+                return _html2;
+            } ,
+            get_html3() {
+                var _html2 = '<canvas class="myCanvas3" width="40" height="20" style="background-color: #';
+                _html2 = _html2.concat(this.get_rgb_string_from_screen());
+                _html2 = _html2.concat('"></canvas>');
                 return _html2;
             } ,
 
@@ -232,9 +229,33 @@
               var return_commands = "";
               for (var i = 0; i < this.leds.LEDS.length; i++) {
                   var led = this.leds.LEDS[i];
-                  return_commands = return_commands.concat( this.make_led_command(led.X,led.Y,led.Z,led.R, led.G, led.B));
+                  if (led.S == true) {
+                      return_commands = return_commands.concat( this.make_led_command(led.X,led.Y,led.Z,led.R, led.G, led.B));
+                  }
               }
               return return_commands;
+            },
+            select_all() {
+                var state = false;
+                var s = document.getElementById("mySelect").value;
+                if (s == "All") state = true;
+                if (s == "None") state = false;
+                var z_level = -1;
+                if (s == "Top Level") z_level = 3;
+                if (s == "3rd Level") z_level = 2;
+                if (s == "2nd  Level") z_level = 1;
+                if (s == "Bottom Level") z_level = 0;
+                z_level = Math.floor(z_level);
+
+                for (var i = 0; i < this.leds.LEDS.length; i++) {
+                    var led = this.leds.LEDS[i];
+                    if (z_level > -1) {
+                        console.log(led.Z);
+                        state = false;
+                        if (led.Z == z_level) state = true;
+                    }
+                    led.S = state;
+                }
             },
             set_cube_color (r,g,b) {
                 for (var i = 0; i < this.leds.LEDS.length; i++) {
@@ -265,9 +286,9 @@
             },
             readLocalStorage() {
 
-                if(localStorage.getItem("ledsObject") != null) {
-                    this.leds = JSON.parse(localStorage.getItem('ledsObject'));
-                };
+               // if(localStorage.getItem("ledsObject") != null) {
+               //     this.leds = JSON.parse(localStorage.getItem('ledsObject'));
+               // };
                 if(localStorage.getItem("rgb_red") != null) {
                     this.rgb_red = localStorage.getItem('rgb_red');
                 };
@@ -285,8 +306,8 @@
                //this.set_led_color(2,2,1,0,255,0);
                store.commit('setleds', this.leds);
                store.commit('set_rgb_red',this.rgb_red);
-                store.commit('set_rgb_green',this.rgb_green);
-                store.commit('set_rgb_blue',this.rgb_blue);
+               store.commit('set_rgb_green',this.rgb_green);
+               store.commit('set_rgb_blue',this.rgb_blue);
                var _url = "http://220.244.249.125:8085/cube.php?d=".concat(this.led_to_commands());
                console.log(_url)
                 this.$http.get(_url)
@@ -310,7 +331,13 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+    input:checked {
+       background-color: black;
+        height: 20px;
+    }
+    th {
+    text-align: center;
+   }
   .evenlevel {
       background: lightyellow;
   }
