@@ -1,20 +1,28 @@
 <template>
   <div>
     <div class="container">
-        <div v-if="snapshotFile!=''">
+        <div>
             <button class="btn" v-on:click="get_snapshot" type="button">
-                <i class="fa  fa-camera fa" aria-hidden="true"></i>
+                <i class="fa  fa-camera fa-2x" aria-hidden="true"></i>
             </button>
+            <button class="btn" v-on:click="get_video" type="button">
+                <i class="fa fa-video-camera fa-2x" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div v-if="snapshotFile!=''">
             <img v-if="screen_with<800" :src='snapshotFile' width="300" height="300"/>
             <img v-if="screen_with>800" :src='snapshotFile' width="600" height="600"/>
             <br />
             <br />
         </div>
-        <div style="color: gray" v-if="snapshot==0">
+        <div v-if="videoFile!=''">
+            <div v-html="videoFile" ></div>
+        </div>
+        <div v-if="snapshotFile==''&&videoFile==''">
             <!-- <img src="../assets/camera_still.jpg" width="300" height="457"/> -->
             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
             <br />&nbsp;
-            Taking a new photo ..
+            Taking a new photo/video ..
             <br />&nbsp;
         </div>
 
@@ -54,96 +62,60 @@
         </div>
       </div>
           <div class="row" >
-        <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td>
-            <input type="number"  v-model="rgb_red">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: red;">{{rgb_red}}</span><br>
-
-          </td>
-            <td>
-                <input type="number"  v-model="rgb_green">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: green;">{{rgb_green}}</span><br>
-
-            </td>
-            <td>
-                <input type="number"  v-model="rgb_blue">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: blue;">{{rgb_blue}}</span><br>
-
-            </td>
-        </tr>
-            <br />
-        </table>
-        <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-            <td>
-            <button  class="btn"  v-on:click="set_color('black')" type="button">
-                Black
-            </button>
-            </td>
-            <td>
-                <button  class="btn"  v-on:click="set_color('white')" type="button">
-                    White
-                </button>
-            </td>
-            <td>
-                <button  class="btn"  v-on:click="set_color('red')" type="button">
-                    Red
-                </button>
-            </td>
-            <td>
-                <button  class="btn"  v-on:click="set_color('green')" type="button">
-                    Green
-                </button>
-            </td>
-            <td>
-                <button  class="btn"  v-on:click="set_color('blue')" type="button">
-                    Blue
-                </button>
-            </td>
-            <td>
-                <button  class="btn"  v-on:click="set_color('purple')" type="button">
-                    Purple
-                </button>
-            </td>
-        </tr>
-        </table>
-
-        <div class="panelbottom">
-          <hr>
-          <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
-            <tr>
-                <td>
+              <div class="panelbottom">
+                  <hr>
+                  <input type="number"  v-model="rgb_red">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: red;">{{rgb_red}}</span>
+                  <input type="number"  v-model="rgb_green">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: green;">{{rgb_green}}</span>
+                  <input type="number"  v-model="rgb_blue">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: blue;">{{rgb_blue}}</span>
+                  <button  class="btn"  v-on:click="set_color('black')" type="button">
+                      Black
+                  </button>
+                  <button  class="btn"  v-on:click="set_color('white')" type="button">
+                      White
+                  </button>
+                  <button  class="btn"  v-on:click="set_color('red')" type="button">
+                      Red
+                  </button>
+                  <button  class="btn"  v-on:click="set_color('green')" type="button">
+                      Green
+                  </button>
+                  <button  class="btn"  v-on:click="set_color('blue')" type="button">
+                      Blue
+                  </button>
+                  <button  class="btn"  v-on:click="set_color('purple')" type="button">
+                      Purple
+                  </button>
+                  <span class="label label-danger">Animation</span>
+                  <button  class="btn"  v-on:click="extraCommand('rain00000')" type="button">
+                      <span class="label label-danger">Rain</span>
+                  </button>
+                  <button  class="btn"  v-on:click="extraCommand('random000')" type="button">
+                      <span class="label label-danger">Random</span>
+                  </button>
+                  <button  class="btn"  v-on:click="extraCommand('pulse0000')" type="button">
+                      <span class="label label-danger">Heart</span>
+                  </button>
+                  <hr>
                   <button  class="btn"  v-on:click="light_on" type="button">
                       Apply
+                      <span v-html="get_html3()"></span>
                   </button>
-                    <span v-html="get_html3()"></span>
-                </td>
-                <td>
-                    <button  class="btn" v-on:click="select_all()" type="button">
-                        Select:<br />
-                        <select id="mySelect" >
-                            <option value="All">All</option>
-                            <option value="None">None</option>
-                            <option value="Top Level">Top Level</option>
-                            <option value="3rd Level">3rd Level</option>
-                            <option value="2nd  Level">2nd  Level</option>
-                            <option value="Bottom Level">Bottom Level</option>
-                            <option value="Random">Random</option>
-                            <option value="Cube">Cube</option>
-                        </select>
-                    </button>
-                </td>
-                <td>
-                    <button  class="btn"  v-on:click="extraCommand('rain00000')" type="button">
-                        Rain<br />
-                        <span class="label label-danger">Animation</span>
-                    </button>
-                    <button  class="btn"  v-on:click="extraCommand('random000')" type="button">
-                        Random<br />
-                        <span class="label label-danger">Animation</span>
-                    </button>
-                </td>
-            </tr>
-          </table>
-          <hr>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <button  class="btn" v-on:click="select_all()" type="button">
+                      Select:<br />
+                      <select id="mySelect" >
+                          <option value="All">All</option>
+                          <option value="None">None</option>
+                          <option value="Top Level">Top Level</option>
+                          <option value="3rd Level">3rd Level</option>
+                          <option value="2nd  Level">2nd  Level</option>
+                          <option value="Bottom Level">Bottom Level</option>
+                          <option value="Random">Random</option>
+                          <option value="Cube">Cube</option>
+                      </select>
+                  </button>
+
+
         </div>
           <table class="table">
               <thead>
@@ -200,6 +172,8 @@
             return {
                 snapshot: -1,
                 snapshotObject: {},
+                video: 0,
+                videoObject: {},
                 showRangeFinder: false,
                 rgb_red: 0,
                 rgb_green: 0,
@@ -247,18 +221,47 @@
                 else
                     return "";
             },
+            videoFile: function () {
+                if (this.videoObject == undefined)
+                    return "";
+                if (this.videoObject.hasOwnProperty('filename'))
+                    if ("NOKEYS" == this.videoObject.filename)
+                        return '<img src="http://220.244.249.125:8085/camera_still.jpg" width="300" height="457"/>';
+                    else {
+                        var _src = "http://220.244.249.125:8085/images/"+this.videoObject.filename;
+                        var w = "400";
+                        var h = "225";
+                        if (screen.width >= 800 ) {
+                            w = "800";
+                            h = "450";
+                        };
+                        var _html =
+                            '<video width="'+w+'" height="'+h+'" controls autoplay>'+
+                            '<source src="'+_src+'" type="video/mp4"> '+
+                            'Your browser does not support the video tag.'+
+                            '</video>';
+                        return _html;
+                    }
+                else
+                    return "";
+            },
         },
         created: function () {
             this. readLocalStorage();
-            this.select_all();
             this.get_snapshot();
+            for (var i = 0; i < this.leds.LEDS.length; i++) {
+                var led = this.leds.LEDS[i];
+                led.S = true;
+            }
         },
         methods: {
             get_snapshot() {
-                // var _url = "http://220.244.249.125:8085/cube.php?d=".concat(this.led_to_commands());
-                var _url = "http://220.244.249.125:8085/camera.php";
                 this.snapshot = 0 ;
+                this.video = 0 ;
                 this.snapshotObject = {};
+                this.videoObject = {};
+                var _url = "http://220.244.249.125:8085/camera.php";
+                console.log(_url);
                 this.$http.get(_url)
                     .then(function (response) {
                         this.snapshot =1 ;
@@ -269,6 +272,29 @@
 
                         alertify.warning("Snapshot failed");
                         this.snapshot = -1;
+                    });
+            },
+            get_video() {
+                this.snapshot = 0 ;
+                this.video = 0 ;
+                this.snapshotObject = {};
+                this.videoObject = {};
+                var _url = "http://220.244.249.125:8085/video.php?duration=10";
+                console.log(_url);
+                this.video = 0 ;
+                this.snapshot = 0 ;
+                this.snapshotObject = {};
+                this.videoObject = {};
+                this.$http.get(_url)
+                    .then(function (response) {
+                        this.video =1 ;
+                        console.log(response.body);
+                        this.videoObject = response.body;
+                    })
+                    .catch(function (response) {
+                        console.log(response);
+                        console.log("Video failed");
+                        this.video = 0 ;
                     });
             },
             set_color(color_name) {
@@ -450,7 +476,7 @@
                     .then(function (response) {
                         // console.log(response.body)
                         this.thecube = response.body;
-                        this.get_snapshot();
+                        this. get_video();
                     })
                     .catch(function (response) {
                         alertify.warning("thecube failed");
@@ -481,6 +507,14 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    .badge {
+        margin-right: 50px;
+    }
+    button {
+        margin-top: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
     input:checked {
        background-color: black;
         height: 20px;
