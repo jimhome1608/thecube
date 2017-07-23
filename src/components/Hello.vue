@@ -64,9 +64,9 @@
           <div class="row" >
               <div class="panelbottom">
                   <hr>
-                  <input type="number"  v-model="rgb_red">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: red;">{{rgb_red}}</span>
-                  <input type="number"  v-model="rgb_green">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: green;">{{rgb_green}}</span>
-                  <input type="number"  v-model="rgb_blue">&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge" style="background-color: blue;">{{rgb_blue}}</span>
+                  <input type="number" v-model="rgb_red" style="background-color: red;color: white;width: 60px">
+                  <input type="number"  v-model="rgb_green" style="background-color: green;color: white;width: 60px">&nbsp;&nbsp;
+                  <input type="number"  v-model="rgb_blue" style="background-color: blue;color: white;width: 60px">&nbsp;&nbsp;&nbsp;&nbsp;
                   <button  class="btn"  v-on:click="set_color('black')" type="button">
                       Black
                   </button>
