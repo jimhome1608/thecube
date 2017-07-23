@@ -133,12 +133,12 @@
                 </td>
                 <td>
                     <button  class="btn"  v-on:click="extraCommand('rain00000')" type="button">
-                        Rain
-                        <i class="fa fa-eyedropper" aria-hidden="true"></i>
+                        Rain<br />
+                        <span class="label label-danger">Animation</span>
                     </button>
                     <button  class="btn"  v-on:click="extraCommand('random000')" type="button">
-                        Random
-                        <i class="fa fa-random" aria-hidden="true"></i>
+                        Random<br />
+                        <span class="label label-danger">Animation</span>
                     </button>
                 </td>
             </tr>
@@ -250,6 +250,7 @@
         },
         created: function () {
             this. readLocalStorage();
+            this.select_all();
             this.get_snapshot();
         },
         methods: {
