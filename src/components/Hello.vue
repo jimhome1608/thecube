@@ -2,6 +2,9 @@
   <div>
     <div class="container">
         <div v-if="snapshotFile!=''">
+            <button class="btn" v-on:click="get_snapshot" type="button">
+                <i class="fa  fa-camera fa" aria-hidden="true"></i>
+            </button>
             <img v-if="screen_with<800" :src='snapshotFile' width="300" height="300"/>
             <img v-if="screen_with>800" :src='snapshotFile' width="600" height="600"/>
             <br />
@@ -129,14 +132,13 @@
                     </button>
                 </td>
                 <td>
-                    <button  class="btn"  v-on:click="random_random" type="button">
-                        Suprise
+                    <button  class="btn"  v-on:click="extraCommand('rain00000')" type="button">
+                        Rain
+                        <i class="fa fa-eyedropper" aria-hidden="true"></i>
                     </button>
-                </td>
-                <td>
-                    <button class="btn" v-on:click="get_snapshot" type="button">
-                        Photo
-                        <i class="fa  fa-camera fa" aria-hidden="true"></i>
+                    <button  class="btn"  v-on:click="extraCommand('random000')" type="button">
+                        Random
+                        <i class="fa fa-random" aria-hidden="true"></i>
                     </button>
                 </td>
             </tr>
@@ -338,7 +340,7 @@
               hexString = hexString.toUpperCase();
               return hexString;
             },
-            make_led_command(x,y,z,r,g,b) {
+            make_led_command(x,y,z,r,g,b) { //{rain00000} {random000} {400000000}
                 var led =x.toString().concat(y.toString(),z.toString());
                 var cmd = "%7B".concat(led,this.get_rgb_string(r,g,b),"%7D");
                 return cmd;
@@ -439,6 +441,19 @@
                     this.rgb_blue = localStorage.getItem('rgb_blue');
                 };
 
+            },
+            extraCommand (xCommand) {
+                var _url = "http://220.244.249.125:8085/cube.php?d=".concat("%7B",xCommand,"%7D");
+                console.log(_url);
+                this.$http.get(_url)
+                    .then(function (response) {
+                        // console.log(response.body)
+                        this.thecube = response.body;
+                        this.get_snapshot();
+                    })
+                    .catch(function (response) {
+                        alertify.warning("thecube failed");
+                    });
             },
             light_on() {
                this.set_cube_color(this.rgb_red, this.rgb_green, this.rgb_blue);
