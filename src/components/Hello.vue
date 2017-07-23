@@ -29,42 +29,12 @@
         <div class="row" align="left">
           <!-- <input type="checkbox" v-model="showRangeFinder">
           <label for="checkbox">Show Sliders</label> -->
-        <div v-if="showRangeFinder==true">
-            <range-slider
-                    class="slider"
-                    min="0"
-                    max="255"
-                    step="5"
-                    v-model="rgb_red">
-            </range-slider>
-            <span class="badge" style="background-color: red;">{{rgb_red}}</span>
-            <br />
-            <br />
-            <range-slider
-                    class="slider"
-                    min="0"
-                    max="255"
-                    step="5"
-                    v-model="rgb_green">
-            </range-slider>
-            <span class="badge" style="background-color: green;">{{rgb_green}}</span>
-            <br />
-            <br />
-            <range-slider
-                    class="slider"
-                    min="0"
-                    max="255"
-                    step="5"
-                    v-model="rgb_blue">
-            </range-slider>
-            <span class="badge" style="background-color: blue;">{{rgb_blue}}</span>
-            <br />
-        </div>
+
       </div>
           <div class="row" >
               <div class="panelbottom">
                   <hr>
-                  <input type="number" v-model="rgb_red" style="background-color: red;color: white;width: 60px">
+                  <input id="rgb_red" type="number" v-model="rgb_red" style="background-color: red;color: white;width: 60px">
                   <input type="number"  v-model="rgb_green" style="background-color: green;color: white;width: 60px">&nbsp;&nbsp;
                   <input type="number"  v-model="rgb_blue" style="background-color: blue;color: white;width: 60px">&nbsp;&nbsp;&nbsp;&nbsp;
                   <button  class="btn"  v-on:click="set_color('black')" type="button">
@@ -96,7 +66,7 @@
                       <span class="label label-danger">Heart</span>
                   </button>
                   <hr>
-                  <button  class="btn"  v-on:click="light_on" type="button">
+                  <button  class="btn applyBtn"  v-on:click="light_on" type="button">
                       Apply
                       <span v-html="get_html3()"></span>
                   </button>
@@ -373,12 +343,20 @@
                 return cmd;
             },
             led_to_commands() {
+              var CountNotSelected = 0;
               var return_commands = "";
               for (var i = 0; i < this.leds.LEDS.length; i++) {
                   var led = this.leds.LEDS[i];
                   if (led.S == true) {
                       return_commands = return_commands.concat( this.make_led_command(led.X,led.Y,led.Z,led.R, led.G, led.B));
                   }
+                  else {
+                      CountNotSelected++;
+                  }
+              }
+              if (CountNotSelected ==0) {
+                  led = this.leds.LEDS[0];
+                  return_commands = "%7B".concat("400",this.get_rgb_string(led.R, led.G, led.B),"%7D");
               }
               return return_commands;
             },
@@ -491,6 +469,7 @@
                store.commit('set_rgb_green',this.rgb_green);
                store.commit('set_rgb_blue',this.rgb_blue);
                var _url = "http://220.244.249.125:8085/cube.php?d=".concat(this.led_to_commands());
+               // console.log(_url)
                 this.$http.get(_url)
                     .then(function (response) {
                        // console.log(response.body)
@@ -518,6 +497,25 @@
     input:checked {
        background-color: black;
         height: 20px;
+    }
+    input:focus {
+        border-color: black;
+        border-width: 5px;
+    }
+    .panelbottom {
+        border-width: 3px;
+        border-radius : 10px;
+    }
+    img {
+        border-color: black;
+        border-width: 3px;
+        border-radius : 20px;
+    }
+    .applyBtn {
+        background-color: lightyellow;
+        border-color: black;
+        border-width: 3px;
+        border-radius : 10px;
     }
     th {
     text-align: center;
