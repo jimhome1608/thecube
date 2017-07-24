@@ -30,13 +30,12 @@
             </div>
             <br />&nbsp;
         </div>
-        <div v-if="snapshot==get_state.error||videoFile==get_state.error">
+        <div v-if="snapshot==get_state.error||video==get_state.error">
             <i class="fa fa-thumbs-down fa-2x" aria-hidden="true"></i>
             <br />&nbsp;
-            {{error_message}}
+            <div v-html="error_message" ></div>
             <br />&nbsp;
         </div>
-        {{error_message}}
 
         <div class="row" align="left">
           <!-- <input type="checkbox" v-model="showRangeFinder">
@@ -255,7 +254,7 @@
                     })
                     .catch(function (response) {
                         console.log(response);
-                        this.error_message = "Get Photo: Failed";
+                        this.error_message = "Get Photo: Failed<br />".concat("Response: ",response.body);
                         console.log("Photo failed");
                         this.snapshot = this.get_state.error;
                     });
@@ -277,7 +276,7 @@
                     })
                     .catch(function (response) {
                         console.log(response);
-                        this.error_message = "Get video: Failed";
+                        this.error_message = "Get Video: Failed<br />".concat("Response: ",response.body);
                         console.log("Video failed");
                         this.video = this.get_state.error;
                     });
