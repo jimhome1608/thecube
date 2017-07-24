@@ -18,13 +18,25 @@
         <div v-if="videoFile!=''">
             <div v-html="videoFile" ></div>
         </div>
-        <div v-if="snapshotFile==''&&videoFile==''">
+        <div v-if="snapshot==get_state.waiting||video==get_state.waiting">
             <!-- <img src="../assets/camera_still.jpg" width="300" height="457"/> -->
             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
             <br />&nbsp;
-            Taking a new photo/video ..
+            <div v-if="snapshot==get_state.waiting">
+               Taking a new photo ..
+            </div>
+            <div v-if="video==get_state.waiting">
+                Taking a new video ..
+            </div>
             <br />&nbsp;
         </div>
+        <div v-if="snapshot==get_state.error||videoFile==get_state.error">
+            <i class="fa fa-thumbs-down fa-2x" aria-hidden="true"></i>
+            <br />&nbsp;
+            {{error_message}}
+            <br />&nbsp;
+        </div>
+        {{error_message}}
 
         <div class="row" align="left">
           <!-- <input type="checkbox" v-model="showRangeFinder">
@@ -37,33 +49,33 @@
                   <input id="rgb_red" type="number" v-model="rgb_red" style="background-color: red;color: white;width: 60px">
                   <input type="number"  v-model="rgb_green" style="background-color: green;color: white;width: 60px">&nbsp;&nbsp;
                   <input type="number"  v-model="rgb_blue" style="background-color: blue;color: white;width: 60px">&nbsp;&nbsp;&nbsp;&nbsp;
-                  <button  class="btn"  v-on:click="set_color('black')" type="button">
-                      Black
+                  <button  class="btn"  v-on:click="set_color('black')" type="button" style="background-color: black">
+                      &nbsp;
                   </button>
-                  <button  class="btn"  v-on:click="set_color('white')" type="button">
-                      White
+                  <button  class="btn"  v-on:click="set_color('white')" type="button" style="background-color: white">
+                      &nbsp;
                   </button>
-                  <button  class="btn"  v-on:click="set_color('red')" type="button">
-                      Red
+                  <button  class="btn"  v-on:click="set_color('red')" type="button" style="background-color: red">
+                      &nbsp;
                   </button>
-                  <button  class="btn"  v-on:click="set_color('green')" type="button">
-                      Green
+                  <button  class="btn"  v-on:click="set_color('green')" type="button" style="background-color: green">
+                      &nbsp;
                   </button>
-                  <button  class="btn"  v-on:click="set_color('blue')" type="button">
-                      Blue
+                  <button  class="btn"  v-on:click="set_color('blue')" type="button" style="background-color: blue">
+                      &nbsp;
                   </button>
-                  <button  class="btn"  v-on:click="set_color('purple')" type="button">
-                      Purple
+                  <button  class="btn"  v-on:click="set_color('purple')" type="button" style="background-color: purple">
+                      &nbsp;
                   </button>
                   <span class="label label-danger">Animation</span>
-                  <button  class="btn"  v-on:click="extraCommand('rain00000')" type="button">
+                  <button  class="btn applyBtn"  v-on:click="extraCommand('rain00000')" type="button">
                       <span class="label label-danger">Rain</span>
                   </button>
-                  <button  class="btn"  v-on:click="extraCommand('random000')" type="button">
+                  <button  class="btn applyBtn"  v-on:click="extraCommand('random000')" type="button">
                       <span class="label label-danger">Random</span>
                   </button>
-                  <button  class="btn"  v-on:click="extraCommand('pulse0000')" type="button">
-                      <span class="label label-danger">Heart</span>
+                  <button  class="btn applyBtn"   v-on:click="extraCommand('pulse0000')" type="button">
+                      <span class="label label-danger">Pulse</span>
                   </button>
                   <hr>
                   <button  class="btn applyBtn"  v-on:click="light_on" type="button">
@@ -140,9 +152,12 @@
         },
         data: function() {
             return {
-                snapshot: -1,
-                snapshotObject: {},
+                //get_state: {none:-2, error: -1,waiting: 0,done: 1},
+
+                snapshot: 0,
                 video: 0,
+                error_message: "",
+                snapshotObject: {},
                 videoObject: {},
                 showRangeFinder: false,
                 rgb_red: 0,
@@ -175,6 +190,9 @@
             }
         },
         computed: {
+            get_state: function () {
+                return {"none": 0, "waiting": 1, "done": 2, "error":3};
+            },
             screen_with: function() {
                 return screen.width;
             },
@@ -182,11 +200,7 @@
                 if (this.snapshotObject == undefined)
                     return "";
                 if (this.snapshotObject.hasOwnProperty('filename')) {
-                    console.log(this.snapshotObject.filename);
-                    if ("NOKEYS" == this.snapshotObject.filename)
-                        return "../assets/leaves.jpg";
-                    else
-                        return "http://220.244.249.125:8085/images/" + this.snapshotObject.filename;
+                    return "http://220.244.249.125:8085/images/" + this.snapshotObject.filename;
                 }
                 else
                     return "";
@@ -226,45 +240,46 @@
         },
         methods: {
             get_snapshot() {
-                this.snapshot = 0 ;
-                this.video = 0 ;
+                //get_state: {none:-2, error: -1,waiting: 0,done: 1},
+                this.snapshot = this.get_state.waiting;
+                this.video = this.get_state.none;
                 this.snapshotObject = {};
                 this.videoObject = {};
                 var _url = "http://220.244.249.125:8085/camera.php";
                 console.log(_url);
                 this.$http.get(_url)
                     .then(function (response) {
-                        this.snapshot =1 ;
+                        this.snapshot = this.get_state.done;
                         console.log(response.body);
                         this.snapshotObject = response.body;
                     })
                     .catch(function (response) {
-
-                        alertify.warning("Snapshot failed");
-                        this.snapshot = -1;
+                        console.log(response);
+                        this.error_message = "Get Photo: Failed";
+                        console.log("Photo failed");
+                        this.snapshot = this.get_state.error;
                     });
             },
             get_video() {
-                this.snapshot = 0 ;
-                this.video = 0 ;
+                this.snapshot = this.get_state.none;
+                this.video = this.get_state.waiting;
                 this.snapshotObject = {};
                 this.videoObject = {};
                 var _url = "http://220.244.249.125:8085/video.php?duration=10";
                 console.log(_url);
-                this.video = 0 ;
-                this.snapshot = 0 ;
                 this.snapshotObject = {};
                 this.videoObject = {};
                 this.$http.get(_url)
                     .then(function (response) {
-                        this.video =1 ;
+                        this.video = this.get_state.done;
                         console.log(response.body);
                         this.videoObject = response.body;
                     })
                     .catch(function (response) {
                         console.log(response);
+                        this.error_message = "Get video: Failed";
                         console.log("Video failed");
-                        this.video = 0 ;
+                        this.video = this.get_state.error;
                     });
             },
             set_color(color_name) {
