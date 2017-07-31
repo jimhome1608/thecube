@@ -37,72 +37,62 @@
             <br />&nbsp;
         </div>
 
-        <div class="row" align="left">
-          <!-- <input type="checkbox" v-model="showRangeFinder">
-          <label for="checkbox">Show Sliders</label> -->
+        <div class="row" align="center">
+            <span class="label label-danger">Animation</span>
+            <button  class="btn applyBtn"  v-on:click="extraCommand('rain00000')" type="button">
+                <span class="label label-danger">Rain</span>
+            </button>
+            <button  class="btn applyBtn"  v-on:click="extraCommand('random000')" type="button">
+                <span class="label label-danger">Random</span>
+            </button>
+            <button  class="btn applyBtn"   v-on:click="extraCommand('pulse0000')" type="button">
+                <span class="label label-danger">Pulse</span>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button  class="btn"  v-on:click="set_color('red')" type="button" style="background-color: red;height: 20px; width: 15px;">
+                &nbsp;
+            </button>
+            <input id="rgb_red" type="number" v-model="rgb_red" style="background-color: red;color: white;width: 40px">
+            <button  class="btn"  v-on:click="set_color('green')" type="button" style="background-color: green;height: 20px; width: 15px;">
+                &nbsp;
+            </button>
+            <input type="number"  v-model="rgb_green" style="background-color: green;color: white;width: 40px">&nbsp;&nbsp;
+            <button  class="btn"  v-on:click="set_color('blue')" type="button" style="background-color: blue;height: 20px; width: 15px;">
+                &nbsp;
+            </button>
+            <input type="number"  v-model="rgb_blue" style="background-color: blue;color: white;width: 40px">&nbsp;&nbsp;&nbsp;&nbsp;
 
-      </div>
-          <div class="row" >
-              <div class="panelbottom">
-                  <hr>
-                  <input id="rgb_red" type="number" v-model="rgb_red" style="background-color: red;color: white;width: 60px">
-                  <input type="number"  v-model="rgb_green" style="background-color: green;color: white;width: 60px">&nbsp;&nbsp;
-                  <input type="number"  v-model="rgb_blue" style="background-color: blue;color: white;width: 60px">&nbsp;&nbsp;&nbsp;&nbsp;
-                  <button  class="btn"  v-on:click="set_color('black')" type="button" style="background-color: black">
-                      &nbsp;
-                  </button>
-                  <button  class="btn"  v-on:click="set_color('white')" type="button" style="background-color: white">
-                      &nbsp;
-                  </button>
-                  <button  class="btn"  v-on:click="set_color('red')" type="button" style="background-color: red">
-                      &nbsp;
-                  </button>
-                  <button  class="btn"  v-on:click="set_color('green')" type="button" style="background-color: green">
-                      &nbsp;
-                  </button>
-                  <button  class="btn"  v-on:click="set_color('blue')" type="button" style="background-color: blue">
-                      &nbsp;
-                  </button>
-                  <button  class="btn"  v-on:click="set_color('purple')" type="button" style="background-color: purple">
-                      &nbsp;
-                  </button>
-                  <span class="label label-danger">Animation</span>
-                  <button  class="btn applyBtn"  v-on:click="extraCommand('rain00000')" type="button">
-                      <span class="label label-danger">Rain</span>
-                  </button>
-                  <button  class="btn applyBtn"  v-on:click="extraCommand('random000')" type="button">
-                      <span class="label label-danger">Random</span>
-                  </button>
-                  <button  class="btn applyBtn"   v-on:click="extraCommand('pulse0000')" type="button">
-                      <span class="label label-danger">Pulse</span>
-                  </button>
-                  <hr>
-                  <button  class="btn applyBtn"  v-on:click="light_on" type="button">
-                      Apply
-                      <span v-html="get_html3()"></span>
-                  </button>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <button  class="btn" v-on:click="select_all()" type="button">
-                      Select:<br />
-                      <select id="mySelect" >
-                          <option value="All">All</option>
-                          <option value="None">None</option>
-                          <option value="Top Level">Top Level</option>
-                          <option value="3rd Level">3rd Level</option>
-                          <option value="2nd  Level">2nd  Level</option>
-                          <option value="Bottom Level">Bottom Level</option>
-                          <option value="Random">Random</option>
-                          <option value="Cube">Cube</option>
-                      </select>
-                  </button>
-
-
-        </div>
+            <button  class="btn"  v-on:click="set_color('black')" type="button" style="background-color: black;height: 20px; width: 15px;">
+                &nbsp;
+            </button>
+            <button  class="btn"  v-on:click="set_color('purple')" type="button" style="background-color: purple;height: 20px; width: 15px;">
+                &nbsp;
+            </button>
+            <button  class="btn applyBtn"  v-on:click="light_on" type="button">
+                Set Color
+                <span v-html="get_html3()"></span>
+            </button>
+<hr>
           <table class="table">
               <thead>
               <tr>
                   <!--  <th class="nighttime">{{events.records.length}} Events</th> -->
-                  <th>Select</th>
+                  <th>
+                      <button  class="btn" v-on:click="select_all()" type="button">
+                          Select:<br />
+                          <select id="mySelect" >
+                              <option value="All">All</option>
+                              <option value="None">None</option>
+                              <option value="Top Level">Top Level</option>
+                              <option value="3rd Level">3rd Level</option>
+                              <option value="2nd  Level">2nd  Level</option>
+                              <option value="Bottom Level">Bottom Level</option>
+                              <option value="Random">Random</option>
+                              <option value="Cube">Cube</option>
+                          </select>
+                      </button>
+
+                  </th>
                   <th>X</th>
                   <th>Y</th>
                   <th>Z</th>
@@ -138,21 +128,27 @@
 
 <script>
 
-    import RangeSlider from 'vue-range-slider'
-    import 'vue-range-slider/dist/vue-range-slider.css'
-    import store from 'src/store'
+    import store from 'src/store';
 
 
     export default {
         name: 'hello',
         components: {
-            RangeSlider,
             store
         },
         data: function() {
             return {
-                //get_state: {none:-2, error: -1,waiting: 0,done: 1},
-
+                color: null,
+                colors: [
+                    '#1ba6cc',
+                    '#189ba7',
+                    '#98c6ae',
+                    '#45a270',
+                    '#7cb325',
+                    '#eb9826',
+                    '#7B1FA2',
+                    '#FF5252'
+                ],
                 snapshot: 0,
                 video: 0,
                 error_message: "",
@@ -282,24 +278,37 @@
                     });
             },
             set_color(color_name) {
-                this.rgb_blue = 0;
-                this.rgb_green = 0;
-                this.rgb_red = 0;
+                if (color_name == 'black') {
+                    this.rgb_blue = 0;
+                    this.rgb_green = 0;
+                    this.rgb_red = 0;
+                };
+
                 if (color_name == 'white') {
                     this.rgb_blue = 255;
                     this.rgb_green = 255;
                     this.rgb_red = 255;
                 };
                 if (color_name == 'red') {
-                    this.rgb_red = 255;
+                    if (this.rgb_red == 255)
+                        this.rgb_red = 0;
+                    else
+                        this.rgb_red = 255;
                 };
                 if (color_name == 'green') {
-                    this.rgb_green = 255;
+                    if (this.rgb_green == 255)
+                        this.rgb_green = 0;
+                    else
+                        this.rgb_green = 255;
                 };
                 if (color_name == 'blue') {
-                    this.rgb_blue = 255;
+                    if (this.rgb_blue == 255)
+                        this.rgb_blue = 0;
+                    else
+                        this.rgb_blue = 255;
                 };
                 if (color_name == 'purple') {
+                    this.rgb_green = 0;
                     this.rgb_blue = 255;
                     this.rgb_red = 130;
                 };
@@ -318,7 +327,7 @@
                 return _html2;
             } ,
             get_html3() {
-                var _html2 = '<br /><canvas class="myCanvas3"  width="60" height="20" style="background-color: #';
+                var _html2 = '<canvas class="myCanvas3"  width="60" height="20" style="background-color: #';
                 _html2 = _html2.concat(this.get_rgb_string_from_screen());
                 _html2 = _html2.concat('"></canvas>');
                 return _html2;
@@ -504,9 +513,10 @@
         margin-right: 50px;
     }
     button {
-        margin-top: 10px;
-        margin-right: 10px;
-        margin-bottom: 10px;
+        background-color: lightyellow;
+        border-color: black;
+        border-width: 2px;
+        border-radius : 10px;
     }
     input:checked {
        background-color: black;
@@ -526,9 +536,12 @@
         border-radius : 20px;
     }
     .applyBtn {
+        margin-top: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
         background-color: lightyellow;
         border-color: black;
-        border-width: 3px;
+        border-width: 2px;
         border-radius : 10px;
     }
     th {
