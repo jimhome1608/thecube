@@ -2,11 +2,31 @@
   <div>
     <div class="container">
         <div>
+            <select id="mySelect" >
+                <option value="All">All</option>
+                <option value="None">None</option>
+                <option value="Top Level">Top Level</option>
+                <option value="3rd Level">3rd Level</option>
+                <option value="2nd  Level">2nd  Level</option>
+                <option value="Bottom Level">Bottom Level</option>
+                <option value="Random">Random</option>
+                <option value="Cube">Cube</option>
+            </select>
+            <button  class="btn applyBtn"  v-on:click="light_on" type="button">
+                <i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i>
+            </button>
+            <button  class="btn applyBtn"  v-on:click="light_on" type="button">
+                <span v-html="get_html3()"></span>
+            </button>
+            &nbsp;&nbsp;<i class="fa fa-circle" aria-hidden="true"></i>&nbsp;&nbsp;
+
+
             <button class="btn" v-on:click="get_snapshot" type="button">
-                <i class="fa  fa-camera fa-2x" aria-hidden="true"></i>
+                <i class="fa  fa-camera" aria-hidden="true"></i>
+
             </button>
             <button class="btn" v-on:click="get_video" type="button">
-                <i class="fa fa-video-camera fa-2x" aria-hidden="true"></i>
+                <i class="fa fa-video-camera" aria-hidden="true"></i>
             </button>
         </div>
         <div v-if="snapshotFile!=''">
@@ -48,16 +68,17 @@
             <button  class="btn applyBtn"   v-on:click="extraCommand('pulse0000')" type="button">
                 <span class="label label-danger">Pulse</span>
             </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button  class="btn"  v-on:click="set_color('red')" type="button" style="background-color: red;height: 20px; width: 15px;">
+            <br />
+            <span class="label label-info">RGB Color</span>
+            <button  class="btn"  id="btnRed" v-on:click="set_color('red')" type="button" style="background-color: gray;height: 20px; width: 10px;">
                 &nbsp;
             </button>
             <input id="rgb_red" type="number" v-model="rgb_red" style="background-color: red;color: white;width: 40px">
-            <button  class="btn"  v-on:click="set_color('green')" type="button" style="background-color: green;height: 20px; width: 15px;">
+            <button  class="btn"  id="btnGreen" v-on:click="set_color('green')" type="button" style="background-color: gray;height: 20px; width: 10px;">
                 &nbsp;
             </button>
             <input type="number"  v-model="rgb_green" style="background-color: green;color: white;width: 40px">&nbsp;&nbsp;
-            <button  class="btn"  v-on:click="set_color('blue')" type="button" style="background-color: blue;height: 20px; width: 15px;">
+            <button  class="btn"  id="btnBlue" v-on:click="set_color('blue')" type="button" style="background-color: gray;height: 20px; width: 10px;">
                 &nbsp;
             </button>
             <input type="number"  v-model="rgb_blue" style="background-color: blue;color: white;width: 40px">&nbsp;&nbsp;&nbsp;&nbsp;
@@ -68,30 +89,13 @@
             <button  class="btn"  v-on:click="set_color('purple')" type="button" style="background-color: purple;height: 20px; width: 15px;">
                 &nbsp;
             </button>
-            <button  class="btn applyBtn"  v-on:click="light_on" type="button">
-                Set Color
-                <span v-html="get_html3()"></span>
-            </button>
+
 <hr>
           <table class="table">
               <thead>
               <tr>
                   <!--  <th class="nighttime">{{events.records.length}} Events</th> -->
                   <th>
-                      <button  class="btn" v-on:click="select_all()" type="button">
-                          Select:<br />
-                          <select id="mySelect" >
-                              <option value="All">All</option>
-                              <option value="None">None</option>
-                              <option value="Top Level">Top Level</option>
-                              <option value="3rd Level">3rd Level</option>
-                              <option value="2nd  Level">2nd  Level</option>
-                              <option value="Bottom Level">Bottom Level</option>
-                              <option value="Random">Random</option>
-                              <option value="Cube">Cube</option>
-                          </select>
-                      </button>
-
                   </th>
                   <th>X</th>
                   <th>Y</th>
@@ -294,18 +298,34 @@
                         this.rgb_red = 0;
                     else
                         this.rgb_red = 255;
+                   if (this.rgb_red ==255) {
+                        document.getElementById("btnRed").style.background = "rgb(255,0,0)";
+                    } else {
+                        document.getElementById("btnRed").style.background = "rgb(127,127,127)";
+                    }
+
                 };
                 if (color_name == 'green') {
                     if (this.rgb_green == 255)
                         this.rgb_green = 0;
                     else
                         this.rgb_green = 255;
+                    if (this.rgb_green ==255) {
+                        document.getElementById("btnGreen").style.background = "rgb(0,255,0)";
+                    } else {
+                        document.getElementById("btnGreen").style.background = "rgb(127,127,127)";
+                    }
                 };
                 if (color_name == 'blue') {
                     if (this.rgb_blue == 255)
                         this.rgb_blue = 0;
                     else
                         this.rgb_blue = 255;
+                    if (this.rgb_blue ==255) {
+                        document.getElementById("btnBlue").style.background = "rgb(0,0,255)";
+                    } else {
+                        document.getElementById("btnBlue").style.background = "rgb(127,127,127)";
+                    }
                 };
                 if (color_name == 'purple') {
                     this.rgb_green = 0;
@@ -326,8 +346,10 @@
                 _html2 = _html2.concat('"></canvas>');
                 return _html2;
             } ,
+
+
             get_html3() {
-                var _html2 = '<canvas class="myCanvas3"  width="60" height="20" style="background-color: #';
+                var _html2 = '<canvas class="myCanvas3"  width="20" height="20" style="border: 2px solid black; position:relative; top:20; left:0; z-index:1;background-color: #';
                 _html2 = _html2.concat(this.get_rgb_string_from_screen());
                 _html2 = _html2.concat('"></canvas>');
                 return _html2;
@@ -379,7 +401,7 @@
               }
               if (CountNotSelected ==0) {
                   led = this.leds.LEDS[0];
-                  return_commands = "%7B".concat("400",this.get_rgb_string(led.R, led.G, led.B),"%7D");
+                  return_commands = "%7B".concat("444",this.get_rgb_string(led.R, led.G, led.B),"%7D");
               }
               return return_commands;
             },
@@ -484,6 +506,7 @@
                     });
             },
             light_on() {
+               this.select_all();
                this.set_cube_color(this.rgb_red, this.rgb_green, this.rgb_blue);
                //this.set_led_color(3,1,1,255,0,0);
                //this.set_led_color(2,2,1,0,255,0);
@@ -537,7 +560,6 @@
     }
     .applyBtn {
         margin-top: 10px;
-        margin-right: 10px;
         margin-bottom: 10px;
         background-color: lightyellow;
         border-color: black;
