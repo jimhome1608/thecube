@@ -1,33 +1,80 @@
 <template>
   <div>
     <div class="container">
-        <div>
-            <select id="mySelect" >
-                <option value="All">All</option>
-                <option value="None">None</option>
-                <option value="Top Level">Top Level</option>
-                <option value="3rd Level">3rd Level</option>
-                <option value="2nd  Level">2nd  Level</option>
-                <option value="Bottom Level">Bottom Level</option>
-                <option value="Random">Random</option>
-                <option value="Cube">Cube</option>
-            </select>
-            <button  class="btn applyBtn"  v-on:click="light_on" type="button">
-                <i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i>
+        <div class="row">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Select & Apply</th>
+                    <th>Photo</th>
+                    <th>Video</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <select class="selectpicker" id="mySelect">
+                            <optgroup label="All or Nothing">
+                                <option>All</option>
+                                <option>None</option>
+                            </optgroup>
+                            <optgroup label="Levles">
+                                <option>Top Level</option>
+                                <option>3rd Level</option>
+                                <option>2nd Level</option>
+                                <option>Bottom Level</option>
+                            </optgroup>
+                            <optgroup label="Other">
+                                <option>Cube</option>
+                                <option>Random</option>
+                            </optgroup>
+                        </select>
+                        &nbsp;&nbsp;
+                        <span v-html="get_html3()"></span>
+                        &nbsp;&nbsp;
+                        <button  class="btn"  v-on:click="light_on" type="button">
+                           Apply
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn" v-on:click="get_snapshot" type="button">
+                            <i class="fa  fa-camera" aria-hidden="true"></i>
+
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn" v-on:click="get_video" type="button">
+                            <i class="fa fa-video-camera" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <span class="label label-info">RGB Color</span>
+            <button  class="btn"  id="btnRed" v-on:click="set_color('red')" type="button" style="background-color: gray;height: 20px; width: 10px;">
+                &nbsp;
             </button>
-            <button  class="btn applyBtn"  v-on:click="light_on" type="button">
-                <span v-html="get_html3()"></span>
+            <input id="rgb_red" type="number" v-model="rgb_red" style="background-color: red;color: white;width: 40px">
+            <button  class="btn"  id="btnGreen" v-on:click="set_color('green')" type="button" style="background-color: gray;height: 20px; width: 10px;">
+                &nbsp;
             </button>
-            &nbsp;&nbsp;<i class="fa fa-circle" aria-hidden="true"></i>&nbsp;&nbsp;
+            <input type="number"  v-model="rgb_green" style="background-color: green;color: white;width: 40px">&nbsp;&nbsp;
+            <button  class="btn"  id="btnBlue" v-on:click="set_color('blue')" type="button" style="background-color: gray;height: 20px; width: 10px;">
+                &nbsp;
+            </button>
+            <input type="number"  v-model="rgb_blue" style="background-color: blue;color: white;width: 40px">&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <button  class="btn"  v-on:click="set_color('black')" type="button" style="background-color: black;height: 20px; width: 15px;">
+                &nbsp;
+            </button>
+            <button  class="btn"  v-on:click="set_color('purple')" type="button" style="background-color: purple;height: 20px; width: 15px;">
+                &nbsp;
+            </button>
 
 
-            <button class="btn" v-on:click="get_snapshot" type="button">
-                <i class="fa  fa-camera" aria-hidden="true"></i>
 
-            </button>
-            <button class="btn" v-on:click="get_video" type="button">
-                <i class="fa fa-video-camera" aria-hidden="true"></i>
-            </button>
+
         </div>
         <div v-if="snapshotFile!=''">
             <img v-if="screen_with<800" :src='snapshotFile' width="300" height="300"/>
@@ -69,26 +116,7 @@
                 <span class="label label-danger">Pulse</span>
             </button>
             <br />
-            <span class="label label-info">RGB Color</span>
-            <button  class="btn"  id="btnRed" v-on:click="set_color('red')" type="button" style="background-color: gray;height: 20px; width: 10px;">
-                &nbsp;
-            </button>
-            <input id="rgb_red" type="number" v-model="rgb_red" style="background-color: red;color: white;width: 40px">
-            <button  class="btn"  id="btnGreen" v-on:click="set_color('green')" type="button" style="background-color: gray;height: 20px; width: 10px;">
-                &nbsp;
-            </button>
-            <input type="number"  v-model="rgb_green" style="background-color: green;color: white;width: 40px">&nbsp;&nbsp;
-            <button  class="btn"  id="btnBlue" v-on:click="set_color('blue')" type="button" style="background-color: gray;height: 20px; width: 10px;">
-                &nbsp;
-            </button>
-            <input type="number"  v-model="rgb_blue" style="background-color: blue;color: white;width: 40px">&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <button  class="btn"  v-on:click="set_color('black')" type="button" style="background-color: black;height: 20px; width: 15px;">
-                &nbsp;
-            </button>
-            <button  class="btn"  v-on:click="set_color('purple')" type="button" style="background-color: purple;height: 20px; width: 15px;">
-                &nbsp;
-            </button>
 
 <hr>
           <table class="table">
@@ -118,12 +146,6 @@
               </tr>
               </tbody>
           </table>
-        <!--
-         <td v-html="get_html3()"></td>
-        <button type="button"  class="btn btn-danger"  v-on:click="goodbye">
-            <h4>さよなら </h4>
-        </button>
-        -->
       </div> <!-- <div class="row"> -->
 
     </div> <!-- <div class="container"> -->
@@ -349,9 +371,12 @@
 
 
             get_html3() {
-                var _html2 = '<canvas class="myCanvas3"  width="20" height="20" style="border: 2px solid black; position:relative; top:20; left:0; z-index:1;background-color: #';
+                var _html2 = '<i class="fa fa-paint-brush fa-2x" style="color: #';
                 _html2 = _html2.concat(this.get_rgb_string_from_screen());
-                _html2 = _html2.concat('"></canvas>');
+                _html2 = _html2.concat('" aria-hidden="true"></i>');
+                //var _html2 = '<canvas class="myCanvas3"  width="20" height="50px" style="border: 2px solid black; background-color: #';
+                //_html2 = _html2.concat(this.get_rgb_string_from_screen());
+                //_html2 = _html2.concat('"></canvas>');
                 return _html2;
             } ,
             random_random() {
@@ -532,15 +557,14 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+    .box {
+        display: inline-block;
+    }
     .badge {
         margin-right: 50px;
     }
-    button {
-        background-color: lightyellow;
-        border-color: black;
-        border-width: 2px;
-        border-radius : 10px;
-    }
+
     input:checked {
        background-color: black;
         height: 20px;
@@ -561,9 +585,8 @@
     .applyBtn {
         margin-top: 10px;
         margin-bottom: 10px;
-        background-color: lightyellow;
         border-color: black;
-        border-width: 2px;
+        border-width: 1px;
         border-radius : 10px;
     }
     th {
