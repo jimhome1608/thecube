@@ -1,90 +1,109 @@
 <template>
   <div>
     <div class="container">
-        <div class="row">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Select & Apply</th>
-                    <th>Photo</th>
-                    <th>Video</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <select class="selectpicker" id="mySelect">
-                            <optgroup label="All or Nothing">
-                                <option>All</option>
-                                <option>None</option>
-                            </optgroup>
-                            <optgroup label="Levles">
-                                <option>Top Level</option>
-                                <option>3rd Level</option>
-                                <option>2nd Level</option>
-                                <option>Bottom Level</option>
-                            </optgroup>
-                            <optgroup label="Other">
-                                <option>Cube</option>
-                                <option>Random</option>
-                            </optgroup>
-                        </select>
-                        &nbsp;&nbsp;
+        <div class="row" align="left">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Select:
+            <select class="selectpicker" id="mySelect">
+                <option>All</option>
+                <option>None</option>
+                <option>Top Level</option>
+                <option>3rd Level</option>
+                <option>2nd Level</option>
+                <option>Bottom Level</option>
+                <option>Cube</option>
+                <option>Random</option>
+            </select>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Photo:
+            <button class="btn" v-on:click="get_snapshot" type="button">
+            <i class="fa  fa-camera" aria-hidden="true"></i>
+            </button>
+            Video:
+            <button class="btn" v-on:click="get_video" type="button">
+                <i class="fa fa-video-camera" aria-hidden="true"></i>
+            </button>
+        </div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <td width="75px" align="left">
+                    <span class="label label-default">RGB Color</span>
+                    <br />
+                    <input id="rgb_red" type="number" v-model="rgb_red" style="background-color: red;color: white;width: 60px">
+                    <br />
+                    <input type="number"  v-model="rgb_green" style="background-color: green;color: white;width: 60px">
+                    <input type="number"  v-model="rgb_blue" style="background-color: blue;color: white;width: 60px">
+                    <button  class="btn" v-on:click="add_color">
+                        &nbsp;
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        &nbsp;
+                    </button>
+                    <br />
+                    <br />
+                    <button  class="btn"  id="btnRed" v-on:click="set_color('red')" type="button" style="background-color: red;height: 20px; width: 20px;">
+                        &nbsp;
+                    </button>
+                    <button  class="btn"  id="btnGreen" v-on:click="set_color('green')" type="button" style="background-color: green;height: 20px; width: 20px;">
+                        &nbsp;
+                    </button>
+                    <button  class="btn"  id="btnBlue" v-on:click="set_color('blue')" type="button" style="background-color: blue;height: 20px; width: 20px;">
+                        &nbsp;
+                    </button>
+
+                    <button  class="btn"  v-on:click="set_color('purple')" type="button" style="background-color: purple;height: 20px; width: 20px;">
+                        &nbsp;
+                    </button>
+                    <button  class="btn"  v-on:click="set_color('yellow')" type="button" style="background-color: yellow;height: 20px; width: 20px;">
+                    &nbsp;
+                    </button>
+
+                    <button  class="btn"  v-on:click="set_color('orange')" type="button" style="background-color: orange;height: 20px; width: 20px;">
+                        &nbsp;
+                    </button>
+                    <button  class="btn"  v-on:click="set_color('turquoise')" type="button" style="background-color: turquoise;height: 20px; width: 20px;">
+                        &nbsp;
+                    </button>
+                    <button  class="btn"  v-on:click="set_color('salmon')" type="button" style="background-color: salmon;height: 20px; width: 20px;">
+                        &nbsp;
+                    </button>
+                    <button  class="btn"  v-on:click="set_color('white')" type="button" style="background-color: white;height: 20px; width: 20px;">
+                        &nbsp;
+                    </button>
+                    <button  class="btn"  v-on:click="set_color('black')" type="button" style="background-color: black;height: 20px; width: 20px;">
+                        &nbsp;
+                    </button>
+
+
+                    <br />
+                    <button  class="btn"  v-on:click="light_on" type="button">
                         <span v-html="get_html3()"></span>
-                        &nbsp;&nbsp;
-                        <button  class="btn"  v-on:click="light_on" type="button">
-                           Apply
-                            <i class="fa fa-check" aria-hidden="true"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button class="btn" v-on:click="get_snapshot" type="button">
-                            <i class="fa  fa-camera" aria-hidden="true"></i>
+                    </button>
+                    <br /> <br />
+                    <span class="label label-danger">Animation</span>
+                    <button  class="btn"  v-on:click="extraCommand('rain00000')" type="button">
+                        <span class="label label-danger">Rain</span>
+                    </button>
+                    <button  class="btn"  v-on:click="extraCommand('random000')" type="button">
+                        <span class="label label-danger">Rand</span>
+                    </button>
+                    <button  class="btn"   v-on:click="extraCommand('pulse0000')" type="button">
+                        <span class="label label-danger">Pulse</span>
+                    </button>
+                </td>
+                <td  align="left">
+                    <div v-if="snapshotFile!=''">
+                        <img  :src='snapshotFile' width="100%" />
+                        <br />
+                        <br />
+                    </div>
+                    <div v-if="videoFile!=''">
+                        <div v-html="videoFile" ></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-                        </button>
-                    </td>
-                    <td>
-                        <button class="btn" v-on:click="get_video" type="button">
-                            <i class="fa fa-video-camera" aria-hidden="true"></i>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <span class="label label-info">RGB Color</span>
-            <button  class="btn"  id="btnRed" v-on:click="set_color('red')" type="button" style="background-color: gray;height: 20px; width: 10px;">
-                &nbsp;
-            </button>
-            <input id="rgb_red" type="number" v-model="rgb_red" style="background-color: red;color: white;width: 40px">
-            <button  class="btn"  id="btnGreen" v-on:click="set_color('green')" type="button" style="background-color: gray;height: 20px; width: 10px;">
-                &nbsp;
-            </button>
-            <input type="number"  v-model="rgb_green" style="background-color: green;color: white;width: 40px">&nbsp;&nbsp;
-            <button  class="btn"  id="btnBlue" v-on:click="set_color('blue')" type="button" style="background-color: gray;height: 20px; width: 10px;">
-                &nbsp;
-            </button>
-            <input type="number"  v-model="rgb_blue" style="background-color: blue;color: white;width: 40px">&nbsp;&nbsp;&nbsp;&nbsp;
-
-            <button  class="btn"  v-on:click="set_color('black')" type="button" style="background-color: black;height: 20px; width: 15px;">
-                &nbsp;
-            </button>
-            <button  class="btn"  v-on:click="set_color('purple')" type="button" style="background-color: purple;height: 20px; width: 15px;">
-                &nbsp;
-            </button>
-
-
-
-
-        </div>
-        <div v-if="snapshotFile!=''">
-            <img v-if="screen_with<800" :src='snapshotFile' width="300" height="300"/>
-            <img v-if="screen_with>800" :src='snapshotFile' width="600" height="600"/>
-            <br />
-            <br />
-        </div>
-        <div v-if="videoFile!=''">
-            <div v-html="videoFile" ></div>
-        </div>
         <div v-if="snapshot==get_state.waiting||video==get_state.waiting">
             <!-- <img src="../assets/camera_still.jpg" width="300" height="457"/> -->
             <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -105,21 +124,12 @@
         </div>
 
         <div class="row" align="center">
-            <span class="label label-danger">Animation</span>
-            <button  class="btn applyBtn"  v-on:click="extraCommand('rain00000')" type="button">
-                <span class="label label-danger">Rain</span>
-            </button>
-            <button  class="btn applyBtn"  v-on:click="extraCommand('random000')" type="button">
-                <span class="label label-danger">Random</span>
-            </button>
-            <button  class="btn applyBtn"   v-on:click="extraCommand('pulse0000')" type="button">
-                <span class="label label-danger">Pulse</span>
-            </button>
+
             <br />
-
-
-<hr>
-          <table class="table">
+            <hr>
+            <input type="checkbox" v-model="show_leds">
+            <label for="checkbox">Show Leds</label>
+          <table v-if="show_leds" class="table">
               <thead>
               <tr>
                   <!--  <th class="nighttime">{{events.records.length}} Events</th> -->
@@ -164,6 +174,7 @@
         },
         data: function() {
             return {
+                show_leds: false,
                 color: null,
                 colors: [
                     '#1ba6cc',
@@ -234,14 +245,8 @@
                         return '<img src="http://220.244.249.125:8085/camera_still.jpg" width="300" height="457"/>';
                     else {
                         var _src = "http://220.244.249.125:8085/images/"+this.videoObject.filename;
-                        var w = "400";
-                        var h = "225";
-                        if (screen.width >= 800 ) {
-                            w = "800";
-                            h = "450";
-                        };
                         var _html =
-                            '<video width="'+w+'" height="'+h+'" controls autoplay>'+
+                            '<video width="100%" controls autoplay>'+
                             '<source src="'+_src+'" type="video/mp4"> '+
                             'Your browser does not support the video tag.'+
                             '</video>';
@@ -303,6 +308,9 @@
                         this.video = this.get_state.error;
                     });
             },
+            add_color() {
+               alert("Add Color not implemted yet")
+            },
             set_color(color_name) {
                 if (color_name == 'black') {
                     this.rgb_blue = 0;
@@ -310,44 +318,46 @@
                     this.rgb_red = 0;
                 };
 
+                if (color_name == 'salmon') {
+                    this.rgb_red = 250;
+                    this.rgb_green = 128;
+                    this.rgb_blue = 114;
+
+                };
+                if (color_name == 'turquoise') {
+                    this.rgb_blue = 224;
+                    this.rgb_green = 208;
+                    this.rgb_red = 64;
+                };
+                if (color_name == 'orange') {
+                    this.rgb_blue = 0;
+                    this.rgb_green = 165;
+                    this.rgb_red = 255;
+                };
+                if (color_name == 'yellow') {
+                    this.rgb_blue = 255;
+                    this.rgb_green = 0;
+                    this.rgb_red = 255;
+                };
                 if (color_name == 'white') {
                     this.rgb_blue = 255;
                     this.rgb_green = 255;
                     this.rgb_red = 255;
                 };
                 if (color_name == 'red') {
-                    if (this.rgb_red == 255)
-                        this.rgb_red = 0;
-                    else
-                        this.rgb_red = 255;
-                   if (this.rgb_red ==255) {
-                        document.getElementById("btnRed").style.background = "rgb(255,0,0)";
-                    } else {
-                        document.getElementById("btnRed").style.background = "rgb(127,127,127)";
-                    }
-
+                    this.rgb_blue = 0;
+                    this.rgb_green = 0;
+                    this.rgb_red = 255;
                 };
                 if (color_name == 'green') {
-                    if (this.rgb_green == 255)
-                        this.rgb_green = 0;
-                    else
-                        this.rgb_green = 255;
-                    if (this.rgb_green ==255) {
-                        document.getElementById("btnGreen").style.background = "rgb(0,255,0)";
-                    } else {
-                        document.getElementById("btnGreen").style.background = "rgb(127,127,127)";
-                    }
+                    this.rgb_blue = 0;
+                    this.rgb_green = 255;
+                    this.rgb_red = 0;
                 };
                 if (color_name == 'blue') {
-                    if (this.rgb_blue == 255)
-                        this.rgb_blue = 0;
-                    else
-                        this.rgb_blue = 255;
-                    if (this.rgb_blue ==255) {
-                        document.getElementById("btnBlue").style.background = "rgb(0,0,255)";
-                    } else {
-                        document.getElementById("btnBlue").style.background = "rgb(127,127,127)";
-                    }
+                    this.rgb_blue = 255;
+                    this.rgb_green = 0;
+                    this.rgb_red = 0;
                 };
                 if (color_name == 'purple') {
                     this.rgb_green = 0;
@@ -371,7 +381,7 @@
 
 
             get_html3() {
-                var _html2 = '<i class="fa fa-paint-brush fa-2x" style="color: #';
+                var _html2 = '<i  class="fa fa-paint-brush fa-2x" style="color: #';
                 _html2 = _html2.concat(this.get_rgb_string_from_screen());
                 _html2 = _html2.concat('" aria-hidden="true"></i>');
                 //var _html2 = '<canvas class="myCanvas3"  width="20" height="50px" style="border: 2px solid black; background-color: #';
@@ -438,7 +448,7 @@
                 var z_level = -1;
                 if (s == "Top Level") z_level = 3;
                 if (s == "3rd Level") z_level = 2;
-                if (s == "2nd  Level") z_level = 1;
+                if (s == "2nd Level") z_level = 1;
                 if (s == "Bottom Level") z_level = 0;
                 if (s == "Random") z_level = 4;
                 if (s == "Cube") z_level = 5;
@@ -558,46 +568,26 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-    .box {
-        display: inline-block;
-    }
-    .badge {
-        margin-right: 50px;
-    }
-
     input:checked {
        background-color: black;
         height: 20px;
     }
     input:focus {
         border-color: black;
-        border-width: 5px;
-    }
-    .panelbottom {
-        border-width: 3px;
-        border-radius : 10px;
+        border-width:2px;
     }
     img {
         border-color: black;
         border-width: 3px;
         border-radius : 20px;
     }
-    .applyBtn {
-        margin-top: 10px;
-        margin-bottom: 10px;
+    .btn {
         border-color: black;
         border-width: 1px;
-        border-radius : 10px;
     }
     th {
     text-align: center;
    }
-  .evenlevel {
-      background: lightyellow;
-  }
-  .oddlevel {
-     background: lightcyan;
-  }
   h1, h2 {
     font-weight: normal;
   }
@@ -609,23 +599,8 @@
     display: inline-block;
     margin: 0 10px;
   }
-  .fa-bars, .fa-camera-retro, .fa-hand-spock-o, .switchon, .fa-power-off {
-    cursor: pointer;
-  }
   a {
     color: #42b983;
-  }
-  .bigbutton {
-    width: 90px;
-    height: 90px;
-    font-size: large;
-  }
-  .badge {
-    width: 50px;
-    margin-left: 5px;
-  }
-  .panelbottom {
-    background-color: darkgray;
   }
   input {
     width: 100px;
